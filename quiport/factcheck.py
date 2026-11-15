@@ -344,20 +344,10 @@ class FactCheck:
 
         # Assumption 3: neither version is XML-parseable, so use an HTML5 parser.
         bad = [k for k, r in results.items() if not r["v1_xml_ok"] or not r["v2_xml_ok"]]
-        if bad:
-            xml_detail = (
-                f"{len(bad)}/{len(results)} threads fail strict XML parse in at least one version "
-                f"({bad}) -- confirms that an HTML parser is needed; this is not an export failure"
-            )
-        else:
-            xml_detail = (
-                f"All {len(results)} sampled threads parse as strict XML in both versions "
-                "-- sample did not demonstrate XML incompatibility; no action needed. "
-                "Continue using an HTML parser for documents outside this sample"
-            )
         self.add(
-            "html.parser_compatibility", PASS,
-            xml_detail,
+            "html.not_xml_parseable", PASS if bad else WARN,
+            f"{len(bad)}/{len(results)} threads fail strict XML parse in at least one version "
+            f"({bad}) -- an HTML5 parser is mandatory",
         )
 
         # Assumption 4: pagination is rare but must still be followed.
