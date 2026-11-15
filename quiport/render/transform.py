@@ -285,7 +285,8 @@ def tag_tables(tree) -> int:
         table.add_class("quip-table")
         parent = table.parent
         title = table.get("title")
-        if (title and isinstance(parent, H.Element)
+        if (title and not re.fullmatch(r"Sheet \d+", title)
+                and isinstance(parent, H.Element)
                 and parent.get("data-section-style") == "13"):
             heading = H.Element("h2", {"class": "quip-sheet-name"})
             heading.append(H.Text(H.escape_text(title)))
